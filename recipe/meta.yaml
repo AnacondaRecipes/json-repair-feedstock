@@ -1,5 +1,5 @@
 {% set name = "json-repair" %}
-{% set version = "0.52.5" %}
+{% set version = "0.58.7" %}
 
 package:
   name: {{ name|lower }}
@@ -7,9 +7,9 @@ package:
 
 source:
   - url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name|replace("-", "_") }}-{{ version }}.tar.gz
-    sha256: b17c8af9af91573bb7bd94a32b98a331df1d5e4ca58f0407c80eb14b1489ca1a
+    sha256: 2ea5c841cc1d91dbbe79e9ed4b2b77a5cc04d20892d62a15261b70ce999ec758
   - url: https://github.com/mangiucugna/{{ name|replace("-", "_") }}/archive/refs/tags/v{{ version }}.tar.gz
-    sha256: c98414d228cc19bfd14c6d05f5d37450f2dc8dd21c11cd46b474b03e99225721
+    sha256: 1a5ef33fe5d90f12ccbd01aa13992efa2d77c211ac5b9ce48adcc8c79221f401
     folder: gh_src
 
 build:
@@ -22,8 +22,12 @@ requirements:
     - pip
     - python
     - setuptools >=61.0
+    - wheel
   run:
     - python
+  run_constrained:
+    - jsonschema >=4.21
+    - pydantic >=2
 
 # fixture 'benchmark' not found
 {% set ignore_tests = "--ignore=gh_src/tests/test_performance.py" %}
@@ -40,6 +44,7 @@ test:
   requires:
     - pip
     - pytest
+    - jsonschema
   commands:
     - pip check
     - PYTHONPATH=gh_src pytest -v gh_src/tests {{ ignore_tests }} {{ deselect_tests }}  # [not win]
