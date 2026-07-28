@@ -1,20 +1,15 @@
 {% set name = "json-repair" %}
-{% set version = "0.61.4" %}
-{% set ignore_tests = "--ignore=gh_src/tests/test_performance.py" %}
-{% set deselect_tests = "" %}
-{% set deselect_tests = 'deselect_tests + " --deselect=gh_src/tests/test_repair_json_cli.py::test_cli"' %}  # [win]
+{% set version = "0.61.7" %}
 
-# fixture 'benchmark' not found
-# PermissionError: [WinError 32] The process cannot access the file because it is being used by another process
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
   - url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name|replace("-", "_") }}-{{ version }}.tar.gz
-    sha256: d78c212c1d72606bee30a7886820c9d6f7dbd659883dc2397304735a59f7bf86
+    sha256: a3754543f050093efcda6c9ab00b20a236b5d082c8c622bc65b88fa74ff8d51f
   - url: https://github.com/mangiucugna/{{ name|replace("-", "_") }}/archive/refs/tags/v{{ version }}.tar.gz
-    sha256: 2a52e5efe64bc2b2b366c79f9c97f01cce87454aa715cff5b67f302c37c3eb09
+    sha256: 5f5d4dcef3b590074a49a2d646975bed336d9ba7253600a7971d76468367d407
     folder: gh_src
 
 build:
@@ -33,6 +28,12 @@ requirements:
   run_constrained:
     - jsonschema >=4.21
     - pydantic >=2
+
+# fixture 'benchmark' not found
+{% set ignore_tests = "--ignore=gh_src/tests/test_performance.py" %}
+{% set deselect_tests = "" %}
+# PermissionError: [WinError 32] The process cannot access the file because it is being used by another process
+{% set deselect_tests = deselect_tests + " --deselect=gh_src/tests/test_repair_json_cli.py::test_cli" %}  # [win]
 
 test:
   source_files:
